@@ -5,8 +5,11 @@ POST http://localhost:3003/api/blogs/
 Content-Type: application/json
 
 {
-    "title": "Awesome react blog",
+    "title": "Some good stuff",
     "author": "Bob Smith",
-    "url": "www.reactfun.io",
-    "likes": 100
+    "url": "www.codingcool.io",
+    "likes": 1
 }
+
+###
+DELETE http://localhost:3003/api/blogs/
