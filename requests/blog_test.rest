@@ -7,9 +7,18 @@ Content-Type: application/json
 {
     "title": "Some good stuff",
     "author": "Bob Smith",
-    "url": "www.codingcool.io",
-    "likes": 1
+    "url": "www.codingcool.io"
 }
 
 ###
-DELETE http://localhost:3003/api/blogs/611eb9688e5e9c20ec9f629e
+PUT http://localhost:3003/api/blogs/61200bd6a4dfa240d4677eaa
+Content-Type: application/json
+
+{
+    "title": "Some good stuff",
+    "author": "Bob Smith",
+    "url": "www.codingcool.io",
+    "likes": 17
+}
+###
+DELETE http://localhost:3003/api/blogs/61200b2edcbb2a2d7008f9ba
