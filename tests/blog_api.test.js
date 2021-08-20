@@ -117,6 +117,12 @@ test('blog like amount is updated', async () => {
     .put(`/api/blogs/${blogToUpdate.id}`)
     .send(blog)
     .expect(200)
+
+  const blogsAtEnd = await helper.blogsInDb()
+
+  const likes = blogsAtEnd.map(r => r.likes)
+
+  expect(likes).not.toContain(blogToUpdate.likes)
 })
 
 afterAll(() => {
