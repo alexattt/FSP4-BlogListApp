@@ -3,11 +3,13 @@ GET http://localhost:3003/api/blogs/
 ### 
 POST http://localhost:3003/api/blogs/
 Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImJvYnNtIiwiaWQiOiI2MTI0MTNhMTI1NjRhOTJlYjg2OWFjMDYiLCJpYXQiOjE2Mjk4Mzg1NzcsImV4cCI6MTYyOTg0MjE3N30.QSIJ2TfQLKox8BissEDSCD7XU-lzaD0JirlSpGqp48o
 
 {
-    "title": "Some good stuff",
-    "author": "Bob Smith",
-    "url": "www.codingcool.io"
+    "title": "Testing deletion",
+    "author": "Becky Great",
+    "url": "www.testing.com",
+    "userId": "612413a12564a92eb869ac06"
 }
 
 ###
@@ -21,4 +23,5 @@ Content-Type: application/json
     "likes": 17
 }
 ###
-DELETE http://localhost:3003/api/blogs/61200b2edcbb2a2d7008f9ba
+DELETE http://localhost:3003/api/blogs/612537439548e536188f35c0
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImJvYnNtIiwiaWQiOiI2MTI0MTNhMTI1NjRhOTJlYjg2OWFjMDYiLCJpYXQiOjE2Mjk4Mzg1NzcsImV4cCI6MTYyOTg0MjE3N30.QSIJ2TfQLKox8BissEDSCD7XU-lzaD0JirlSpGqp48o
