@@ -27,82 +27,153 @@ test('unique identifier property of the blog posts is named id', async () => {
   allBlogs.forEach(blog => expect(blog.id).toBeDefined());
 })
 
-test('if likes property is missing, it defaults to 0', async () => {
-  //blog without likes is added
-  const newBlog = {
-    title: "Front-end path",
-    author: "Brad Tom",
-    url: "www.frontendguru.io"
-  }
+describe('actions with blogs where authentication is needed', () => {
+  let headers
 
-  await api
-    .post('/api/blogs')
-    .send(newBlog)
-    .expect(200)
-    .expect('Content-Type', /application\/json/)
+  beforeEach(async () => {
+    const newUser = {
+      username: 'janedoez',
+      name: 'Jane Z. Doe',
+      password: 'password',
+    }
 
-  //since all the other blogs had some likes, the last added has to be the only one with 0 (default)
-    const alLBlogs = await helper.blogsInDb()
-    const likes = alLBlogs.map(n => n.likes)
-    expect(likes).toContain(0)
-})
+    await api
+      .post('/api/users')
+      .send(newUser)
 
-test('a valid blog can be added', async () => {
-  const newBlog = {
-    title: "Front-end path",
-    author: "Brad Tom",
-    url: "www.frontendguru.io",
-    likes: 67
-  }
+    const result = await api
+      .post('/api/login')
+      .send(newUser)
 
-  await api
-    .post('/api/blogs')
-    .send(newBlog)
-    .expect(200)
-    .expect('Content-Type', /application\/json/)
+    headers = {
+      'Authorization': `bearer ${result.body.token}`
+    }
+  })
 
-  const blogsAtEnd = await helper.blogsInDb()
-  expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
+  test('a valid blog can be added', async () => {
+    const newBlog = {
+      title: "Front-end path",
+      author: "Brad Tom",
+      url: "www.frontendguru.io",
+      likes: 67
+    }
   
-  const titles = blogsAtEnd.map(n => n.title)
-  expect(titles).toContain(
-    'Front-end path'
-  )
-})
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .set(headers)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  
+    const blogsAtEnd = await helper.blogsInDb()
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
+    
+    const titles = blogsAtEnd.map(n => n.title)
+    expect(titles).toContain(
+      'Front-end path'
+    )
+  })
 
-test('blog without title and url is not added', async () => {
-  const newBlog = {
-    author: "Bob Smith",
-    likes: 1
-  }
+  test('if likes property is missing, it defaults to 0', async () => {
+    //blog without likes is added
+    const newBlog = {
+      title: "Front-end path",
+      author: "Brad Tom",
+      url: "www.frontendguru.io"
+    }
+  
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .set(headers)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  
+    //since all the other blogs had some likes, the last added has to be the only one with 0 (default)
+      const alLBlogs = await helper.blogsInDb()
+      const likes = alLBlogs.map(n => n.likes)
+      expect(likes).toContain(0)
+  })
 
-  await api
-    .post('/api/blogs')
-    .send(newBlog)
-    .expect(400)
+  test('blog without title and url is not added', async () => {
+    const newBlog = {
+      author: "Bob Smith",
+      likes: 1
+    }
+  
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .set(headers)
+      .expect(400)
+  
+    const blogsAtEnd = await helper.blogsInDb()
+  
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
+  })
 
-  const blogsAtEnd = await helper.blogsInDb()
+  test('operation fails with proper error if url is missing', async () => {
+    const newBlog = {
+      title: 'Blazing Fast Delightful Testing',
+      author: 'Rick Hanlon',
+    }
 
-  expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
-})
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .set(headers)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+  })
 
-test('blog is deleted if id exists and is valid', async () => {
-  const blogsAtStart = await helper.blogsInDb()
-  const blogToDelete = blogsAtStart[0]
+  test('operation fails with proper error if token is missing', async () => {
+    const newBlog = {
+      title: 'Blazing Fast Delightful Testing',
+      author: 'Rick Hanlon',
+    }
 
-  await api
-    .delete(`/api/blogs/${blogToDelete.id}`)
-    .expect(204)
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(401)
+      .expect('Content-Type', /application\/json/)
+  })
 
-  const blogsAtEnd = await helper.blogsInDb()
+  describe('deleting blog list item', () => {
+    let result
 
-  expect(blogsAtEnd).toHaveLength(
-    helper.initialBlogs.length - 1
-  )
+    beforeEach(async () => {
+      const newBlog = {
+        title: 'Great developer experience',
+        author: 'Hector Ramos',
+        url: 'https://jestjs.io/blog/2017/01/30/a-great-developer-experience',
+        likes: 7
+      }
 
-  const titles = blogsAtEnd.map(r => r.title)
+      result = await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .set(headers)
+    })
 
-  expect(titles).not.toContain(blogToDelete.title)
+    test('blog is deleted if the id exists and is valid', async () => {
+      const aBlog = result.body
+
+      const initialBlogs = await helper.blogsInDb()
+      await api
+        .delete(`/api/blogs/${aBlog.id}`)
+        .set(headers)
+        .expect(204)
+
+      const blogsAtEnd = await helper.blogsInDb()
+      expect(blogsAtEnd.length).toBe(initialBlogs.length - 1)
+
+      const titles = blogsAtEnd.map(b => b.title)
+      expect(titles).not.toContain(
+        aBlog.title
+      )
+    })
+  })
 })
 
 test('blog like amount is updated', async () => {
