@@ -3,7 +3,7 @@ GET http://localhost:3003/api/blogs/
 ### 
 POST http://localhost:3003/api/blogs/
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImJvYnNtIiwiaWQiOiI2MTI0MTNhMTI1NjRhOTJlYjg2OWFjMDYiLCJpYXQiOjE2Mjk4Mzg1NzcsImV4cCI6MTYyOTg0MjE3N30.QSIJ2TfQLKox8BissEDSCD7XU-lzaD0JirlSpGqp48o
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFsZXhhdCIsImlkIjoiNjEzOTJkMDRlZmE3MjA0NzY4Y2JlMjczIiwiaWF0IjoxNjMxMTM3MDk5LCJleHAiOjE2MzExNDA2OTl9.p4MttGslotrp2LWDc2EcI0_ZxXmrQChPKXCAEjk3Duo
 
 {
     "title": "Testing deletion",
@@ -15,12 +15,14 @@ Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImJvY
 ###
 PUT http://localhost:3003/api/blogs/61200bd6a4dfa240d4677eaa
 Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFsZXhhdCIsImlkIjoiNjEyOTU3MTNhZTk4ZTUxYzRjM2RkYzg5IiwiaWF0IjoxNjMwNjExNDEwLCJleHAiOjE2MzA2MTUwMTB9.JbpJTlZezrPAt2A6MQSuWo-TUQZ3IGFbRMfuEOLdeYk
 
 {
-    "title": "Some good stuff",
-    "author": "Bob Smith",
-    "url": "www.codingcool.io",
-    "likes": 17
+    "user": "61295713ae98e51c4c3ddc89",
+    "title": "test",
+    "author": "test",
+    "url": "test",
+    "likes": 1
 }
 ###
 DELETE http://localhost:3003/api/blogs/612537439548e536188f35c0
