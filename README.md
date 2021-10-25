@@ -4,4 +4,9 @@ Full Stack Open Part 4 project Blog List App
 I didn't try to deploy this app due to the fact, that I haven't yet created registration form. </br>
 This is a very small app for practicing different MERN stack development concepts. </br>
 
-<a href="https://ibb.co/QcbbLp1"><img src="https://i.ibb.co/fS11fqP/bloglist-app.png" alt="bloglist-app" border="0"></a>
+<h3>Demonstration video</h3>
+<div align="left">
+      <a href="https://www.youtube.com/watch?v=60zldjqGccI">
+         <img src="https://img.youtube.com/vi/60zldjqGccI/0.jpg" style="width:70%;">
+      </a>
+</div>
